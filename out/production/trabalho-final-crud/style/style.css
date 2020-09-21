@@ -1,0 +1,24 @@
+.unselected_button
+{
+    -fx-background-color : #3F51B5;
+    -fx-background-radius : 0;
+
+}
+.unselected_button:hover
+{
+    -fx-background-color : #3949AB;
+}
+.unselected_button:pressed
+{
+    -fx-background-color : #5C6BC0;
+}
+
+.selected_button{
+    -fx-background-color: #303F9F;
+}
+.selected_button:hover{
+    -fx-background-color : #3949AB;
+}
+.selected_button:pressed{
+    -fx-background-color : #5C6BC0;
+}
