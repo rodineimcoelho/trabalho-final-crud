@@ -5,7 +5,22 @@ public class Endereco {
     private String rua;
     private String uf;
     private String cidade;
-    private String cep;
+    private int cep;
+
+    public Endereco(String rua, String uf, String cidade, int cep){
+        setRua(rua);
+        setUf(uf);
+        setCidade(cidade);
+        setCep(cep);
+    }
+
+    public Endereco(int id, String rua, String uf, String cidade, int cep){
+        setId(id);
+        setRua(rua);
+        setUf(uf);
+        setCidade(cidade);
+        setCep(cep);
+    }
 
 
     public int getId() {
@@ -40,11 +55,11 @@ public class Endereco {
         this.cidade = cidade;
     }
 
-    public String getCep() {
+    public int getCep() {
         return cep;
     }
 
-    public void setCep(String cep) {
+    public void setCep(int cep) {
         this.cep = cep;
     }
 }

@@ -1,8 +1,16 @@
 package model;
 
-public class Cliente {
+public class Cliente extends Pessoa{
     private String nomeUsuario;
     private String senha;
+
+    public Cliente (int id, String nome, Endereco endereco, String nomeUsuario, String senha){
+        setId(id);
+        setNome(nome);
+        setEndereco(endereco);
+        setNomeUsuario(nomeUsuario);
+        setSenha(senha);
+    }
 
 
     public String getNomeUsuario() {
