@@ -15,10 +15,74 @@
 
 .selected_button{
     -fx-background-color: #303F9F;
+    -fx-background-radius : 0;
 }
 .selected_button:hover{
     -fx-background-color : #3949AB;
 }
 .selected_button:pressed{
     -fx-background-color : #5C6BC0;
+}
+
+.app_button
+{
+    -fx-background-color : #3F51B5;
+    -fx-background-radius : 25;
+
+}
+.app_button:hover
+{
+    -fx-background-color : #3949AB;
+}
+.app_button:pressed
+{
+    -fx-background-color : #5C6BC0;
+}
+
+.table-view .column-header {
+    -fx-background-color : #3F51B5;
+}
+.table-view .column-header .label{
+    -fx-background-color : #3F51B5;
+    -fx-text-fill : #FFFFFF;
+}
+.table-view:focused {
+    -fx-background-color: #3949AB, -fx-background ;
+}
+.table-view .arrow{
+    -fx-mark-color: #FFFFFF
+}
+
+.text-field{
+     -fx-background-color: -fx-text-box-border, #FFFFFF ;
+     -fx-background-insets: 0, 0 0 1 0 ;
+     -fx-background-radius: 0 ;
+}
+.text-field: focused{
+    -fx-background-color: #3949AB, #FFFFFF ;
+}
+
+.search-bar {
+    -fx-border-radius: 5;
+}
+
+.search-bar:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: #3949AB;
+    -fx-border-radius: 5;
+}
+.list-view .list-cell: hover{
+    -fx-background-color: #3949AB;
+}
+.list-view .list-cell: selected{
+    -fx-background-color: #FFFFFF ;
+    -fx-text-fill: #000000;
+}
+.choice-box{
+     -fx-background-color: -fx-text-box-border, #FFFFFF ;
+     -fx-background-insets: 0, 0 0 1 0 ;
+     -fx-background-radius: 0 ;
+}
+.choice-box: focused{
+    -fx-background-color: #3949AB, #FFFFFF ;
 }

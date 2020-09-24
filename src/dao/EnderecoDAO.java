@@ -27,7 +27,7 @@ public abstract class EnderecoDAO {
 
             resultSet = statement.getGeneratedKeys();
             resultSet.next();
-            idEndereco = resultSet.getInt("id");
+            idEndereco = resultSet.getInt(1);
 
         } catch (SQLException throwables) {
             Alert alert = new Alert(Alert.AlertType.NONE, "Erro ao adicionar ao banco de dados.\n\nErro: " +throwables, ButtonType.OK);

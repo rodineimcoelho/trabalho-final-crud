@@ -1,14 +1,21 @@
 package control;
 
 import application.Main;
+import control.clientes.ClientesController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,8 +42,15 @@ public class AppController implements Initializable {
     @FXML
     private Button button_funcionarios;
 
+
     @FXML
-    private Pane section_pane;
+    private Pane title_pane;
+
+    @FXML
+    private Label title;
+
+    @FXML
+    private BorderPane section_pane;
 
     private double xOffSet = 0;
     private double yOffSet = 0;
@@ -85,7 +99,23 @@ public class AppController implements Initializable {
         unselect(button_fornecedores);
         unselect(button_funcionarios);
 
-        section_pane.setBackground(new Background(new BackgroundFill(Color.web("#683FB5"), CornerRadii.EMPTY, Insets.EMPTY)));
+        title_pane.setBackground(new Background(new BackgroundFill(Color.web("#683FB5"), CornerRadii.EMPTY, Insets.EMPTY)));
+        title.setText("Clientes");
+
+        Parent root = null;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/section.fxml"));
+            loader.setController(new ClientesController());
+            root = loader.load();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.NONE, "Erro ao carregar layout.\n\nErro: " +e, ButtonType.OK);
+            alert.setTitle("Erro");
+            alert.show();
+        }
+
+        section_pane.setCenter(root);
+
     }
 
     @FXML
@@ -93,6 +123,22 @@ public class AppController implements Initializable {
         unselect(button_clientes);
         select(button_fornecedores);
         unselect(button_funcionarios);
+
+        title_pane.setBackground(new Background(new BackgroundFill(Color.web("#A33FB5"), CornerRadii.EMPTY, Insets.EMPTY)));
+        title.setText("Fornecedores");
+
+        Parent root = null;
+
+        try {
+            root = FXMLLoader.load(getClass().getResource("../view/section.fxml"));
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.NONE, "Erro ao carregar layout.\n\nErro: " +e, ButtonType.OK);
+            alert.setTitle("Erro");
+            alert.show();
+        }
+
+        section_pane.setCenter(root);
+
     }
 
     @FXML
@@ -100,6 +146,22 @@ public class AppController implements Initializable {
         unselect(button_clientes);
         unselect(button_fornecedores);
         select(button_funcionarios);
+
+        title_pane.setBackground(new Background(new BackgroundFill(Color.web("#B53F51"), CornerRadii.EMPTY, Insets.EMPTY)));
+        title.setText("Funcionários");
+
+        Parent root = null;
+
+        try {
+            root = FXMLLoader.load(getClass().getResource("../view/section.fxml"));
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.NONE, "Erro ao carregar layout.\n\nErro: " +e, ButtonType.OK);
+            alert.setTitle("Erro");
+            alert.show();
+        }
+
+        section_pane.setCenter(root);
+
     }
 
     void select(Button button){

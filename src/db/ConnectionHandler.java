@@ -9,7 +9,26 @@ public abstract class ConnectionHandler {
 
     public static Connection getConnection(){
         try {
-            return DriverManager.getConnection("jdbc:../../db/crud_database.db");
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:crud_database.db");
+            Statement statement = connection.createStatement();
+            statement.execute(
+                    "CREATE TABLE IF NOT EXISTS enderecos (\n" +
+                            "    id     INTEGER     PRIMARY KEY AUTOINCREMENT,\n" +
+                            "    rua    VARCHAR,\n" +
+                            "    uf     VARCHAR (2),\n" +
+                            "    cidade VARCHAR,\n" +
+                            "    cep    INTEGER (8) \n" +
+                            ");"
+            );
+            statement.execute("" +
+                    "CREATE TABLE IF NOT EXISTS clientes (\n" +
+                    "    id           INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    "    nome         VARCHAR,\n" +
+                    "    id_endereco  INTEGER REFERENCES enderecos (id),\n" +
+                    "    nome_usuario VARCHAR,\n" +
+                    "    senha        VARCHAR\n" +
+                    ");");
+            return connection;
         } catch (SQLException throwables) {
             Alert alert = new Alert(Alert.AlertType.NONE, "Erro na conexão com o banco de dados.\n\nErro: " +throwables, ButtonType.OK);
             alert.setTitle("Erro");

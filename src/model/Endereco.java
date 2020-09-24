@@ -62,4 +62,8 @@ public class Endereco {
     public void setCep(int cep) {
         this.cep = cep;
     }
+
+    public String toString(){
+        return rua +", " +cidade +" - " +uf +" - " +cep;
+    }
 }
