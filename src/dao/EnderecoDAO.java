@@ -53,7 +53,7 @@ public abstract class EnderecoDAO {
 
             resultSet.next();
             endereco = new Endereco(
-                    resultSet.getInt("id"),
+                    id,
                     resultSet.getString("rua"),
                     resultSet.getString("uf"),
                     resultSet.getString("cidade"),
@@ -75,7 +75,7 @@ public abstract class EnderecoDAO {
         PreparedStatement statement = null;
 
         try {
-            statement = connection.prepareStatement("UPDATE enderecos SET rua = ?, uf = ?, cidade = ?, cep = ?WHERE id = ?");
+            statement = connection.prepareStatement("UPDATE enderecos SET rua = ?, uf = ?, cidade = ?, cep = ? WHERE id = ?");
             statement.setString(1, endereco.getRua());
             statement.setString(2, endereco.getUf());
             statement.setString(3, endereco.getCidade());

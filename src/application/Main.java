@@ -18,7 +18,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../view/app_screen.fxml"));
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("../style/style.css").toExternalForm());
+        stage.setScene(scene);
         stage.setTitle("Trabalho Final CRUD");
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();

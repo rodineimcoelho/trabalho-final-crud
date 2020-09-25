@@ -1,6 +1,7 @@
 package control.clientes;
 
 import dao.ClienteDAO;
+import dao.EnderecoDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -17,7 +18,7 @@ import model.Endereco;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AdicionarClientesController implements Initializable {
+public class EditarClientesController implements Initializable {
 
     @FXML
     private HBox appbar;
@@ -53,14 +54,24 @@ public class AdicionarClientesController implements Initializable {
     @FXML
     private Label label;
 
-    TableView<Cliente> tableView;
+    @FXML
+    private Button button;
 
-    public AdicionarClientesController(TableView<Cliente> tableView){
+    private TableView<Cliente> tableView;
+
+    private int id;
+
+    private Cliente cliente;
+
+    public EditarClientesController(TableView<Cliente> tableView, Cliente cliente){
         this.tableView = tableView;
+        this.cliente = cliente;
+        id = cliente.getId();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         box_uf.getItems().addAll(
                 "AC",
                 "AL",
@@ -90,8 +101,12 @@ public class AdicionarClientesController implements Initializable {
                 "SE",
                 "TO");
 
+        button.setText("Editar");
+
         makeStageDraggable();
         addTextLimiter(txt_cep, 8);
+
+        loadTexts();
     }
 
     private void makeStageDraggable() {
@@ -169,12 +184,17 @@ public class AdicionarClientesController implements Initializable {
                                 cep = Integer.parseInt(cepString);
                                 if(!checkEmpty(nomeUsuario, txt_nome_usuario, "Nome de usuário não pode estar vazio", label)){
                                     if(!checkEmpty(senha, txt_senha, "Senha não pode estar vazia", label)){
-                                        Endereco endereco = new Endereco(rua, uf, cidade, cep);
-                                        ClienteDAO.create(new Cliente(nome, endereco, nomeUsuario, senha));
-                                        label.setText("Cliente adicionado com sucesso");
-                                        label.setTextFill(Paint.valueOf("green"));
+                                        Endereco endereco = new Endereco(cliente.getEndereco().getId(), rua, uf, cidade, cep);
 
-                                        tableView.setItems(FXCollections.observableArrayList(ClienteDAO.read()));
+                                        Alert alert = new Alert(Alert.AlertType.NONE, "Tem certeza?", ButtonType.NO, ButtonType.YES);
+                                        alert.setTitle("Confirmação");
+                                        alert.showAndWait();
+
+                                        if(alert.getResult() == ButtonType.YES){
+                                            ClienteDAO.update(new Cliente(id, nome, endereco, nomeUsuario, senha));
+                                            tableView.setItems(FXCollections.observableArrayList(ClienteDAO.read()));
+                                            close(new ActionEvent());
+                                        }
 
                                         txt_nome.setStyle(style);
                                         txt_rua.setStyle(style);
@@ -230,5 +250,15 @@ public class AdicionarClientesController implements Initializable {
                 }
             }
         });
+    }
+
+    private void loadTexts(){
+        txt_nome.setText(cliente.getNome());
+        txt_rua.setText(cliente.getEndereco().getRua());
+        box_uf.getSelectionModel().select(cliente.getEndereco().getUf());
+        txt_cidade.setText(cliente.getEndereco().getCidade());
+        txt_cep.setText(Integer.toString(cliente.getEndereco().getCep()));
+        txt_nome_usuario.setText(cliente.getNomeUsuario());
+        txt_senha.setText(cliente.getSenha());
     }
 }

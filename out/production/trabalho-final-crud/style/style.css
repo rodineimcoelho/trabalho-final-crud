@@ -86,3 +86,8 @@
 .choice-box: focused{
     -fx-background-color: #3949AB, #FFFFFF ;
 }
+
+.menu-item: focused{
+    -fx-background-color: #3949AB;
+    -fx-text-fill: #FFFFFF;
+}

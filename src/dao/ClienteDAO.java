@@ -119,6 +119,8 @@ public abstract class ClienteDAO {
         PreparedStatement statement = null;
 
         try {
+            EnderecoDAO.update(cliente.getEndereco());
+
             statement = connection.prepareStatement("UPDATE clientes SET nome = ?, nome_usuario = ?, senha = ? WHERE id = ?");
             statement.setString(1, cliente.getNome());
             statement.setString(2, cliente.getNomeUsuario());
@@ -133,8 +135,6 @@ public abstract class ClienteDAO {
         }finally {
             ConnectionHandler.closeConnection(connection, statement);
         }
-
-        EnderecoDAO.update(cliente.getEndereco());
     }
 
     public static void delete(int id, int idEndereco){
