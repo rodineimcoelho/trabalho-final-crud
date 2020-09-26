@@ -28,6 +28,14 @@ public abstract class ConnectionHandler {
                     "    nome_usuario VARCHAR,\n" +
                     "    senha        VARCHAR\n" +
                     ");");
+
+            statement.execute("" +
+                    "CREATE TABLE IF NOT EXISTS fornecedores (\n" +
+                    "    id           INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    "    nome         VARCHAR,\n" +
+                    "    id_endereco  INTEGER REFERENCES enderecos (id),\n" +
+                    "    cnpj INTEGER(14)\n" +
+                    ");");
             return connection;
         } catch (SQLException throwables) {
             Alert alert = new Alert(Alert.AlertType.NONE, "Erro na conexão com o banco de dados.\n\nErro: " +throwables, ButtonType.OK);

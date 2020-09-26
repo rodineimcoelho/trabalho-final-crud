@@ -1,6 +1,6 @@
-package control.clientes;
+package control.fornecedores;
 
-import dao.ClienteDAO;
+import dao.FornecedorDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,30 +19,30 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import model.Cliente;
+import model.Fornecedor;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ClientesController implements Initializable {
+public class FornecedoresController implements Initializable {
 
     @FXML
     private TextField search_field;
 
     @FXML
-    private TableView<Cliente> table;
+    private TableView<Fornecedor> table;
 
     @FXML
     private Button add_button;
 
-    private ObservableList<Cliente> clientes;
+    private ObservableList<Fornecedor> fornecedores;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         createColumns();
 
-        add_button.setText("Adicionar Cliente");
+        add_button.setText("Adicionar Fornecedor");
         table.setPlaceholder(new Label("Tabela vazia"));
 
         addContextMenu();
@@ -51,38 +51,40 @@ public class ClientesController implements Initializable {
     }
 
     private void createColumns(){
-        TableColumn columnId = new TableColumn<Cliente, Integer>("ID");
-        TableColumn columnNome = new TableColumn<Cliente, String>("Nome");
-        TableColumn columnEndereco = new TableColumn<Cliente, String>("Endereço");
-        TableColumn columnNomeUsuario = new TableColumn<Cliente, String>("Nome de usuário");
-        TableColumn columnSenha = new TableColumn<Cliente, String>("Senha");
+        TableColumn columnId = new TableColumn<Fornecedor, Integer>("ID");
+        TableColumn columnNome = new TableColumn<Fornecedor, String>("Nome");
+        TableColumn columnEndereco = new TableColumn<Fornecedor, String>("Endereço");
+        TableColumn columnCNPJ = new TableColumn<Fornecedor, String>("CNPJ");
 
         columnId.setEditable(false);
         columnNome.setEditable(false);
         columnEndereco.setEditable(false);
-        columnNomeUsuario.setEditable(false);
-        columnSenha.setEditable(false);
+        columnCNPJ.setEditable(false);
 
         columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        columnEndereco.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Cliente, String>, ObservableValue<String>>() {
+        columnEndereco.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Fornecedor, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue call(TableColumn.CellDataFeatures<Cliente, String> cellDataFeatures) {
+            public ObservableValue call(TableColumn.CellDataFeatures<Fornecedor, String> cellDataFeatures) {
                 return new SimpleStringProperty(cellDataFeatures.getValue().getEndereco().toString());
             }
         });
-        columnNomeUsuario.setCellValueFactory(new PropertyValueFactory<>("nomeUsuario"));
-        columnSenha.setCellValueFactory(new PropertyValueFactory<>("senha"));
+        columnCNPJ.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Fornecedor, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue call(TableColumn.CellDataFeatures<Fornecedor, String> cellDataFeatures) {
+                return new SimpleStringProperty(cellDataFeatures.getValue().getFormattedCnpj());
+            }
+        });
 
-        table.getColumns().addAll(columnId, columnNome, columnEndereco, columnNomeUsuario, columnSenha);
+        table.getColumns().addAll(columnId, columnNome, columnEndereco, columnCNPJ);
     }
 
     @FXML
     void add(ActionEvent event) {
         Stage stage = new Stage();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/adicionar_cliente.fxml"));
-            loader.setController(new AdicionarClientesController(table));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/adicionar_fornecedor.fxml"));
+            loader.setController(new AdicionarFornecedoresController(table));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -97,11 +99,11 @@ public class ClientesController implements Initializable {
 
     }
 
-    void editar(Cliente cliente){
+    void editar(Fornecedor fornecedor){
         Stage stage = new Stage();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/adicionar_cliente.fxml"));
-            loader.setController(new EditarClientesController(table, cliente));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/adicionar_fornecedor.fxml"));
+            loader.setController(new EditarFornecedoresController(table, fornecedor));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -117,8 +119,8 @@ public class ClientesController implements Initializable {
 
     @FXML
     void search(ActionEvent event) {
-        ObservableList<Cliente> search = FXCollections.observableArrayList(ClienteDAO.read(search_field.getText().trim()));
-        if(clientes.size() == 0){
+        ObservableList<Fornecedor> search = FXCollections.observableArrayList(FornecedorDAO.read(search_field.getText().trim()));
+        if(fornecedores.size() == 0){
             table.setPlaceholder(new Label("Tabela vazia"));
         }else if(search.size() == 0){
             table.setPlaceholder(new Label("Sem correspondências para a busca"));
@@ -127,15 +129,15 @@ public class ClientesController implements Initializable {
     }
 
     public void refreshTable(){
-        clientes = FXCollections.observableArrayList(ClienteDAO.read());
-        table.setItems(clientes);
+        fornecedores = FXCollections.observableArrayList(FornecedorDAO.read());
+        table.setItems(fornecedores);
     }
 
     void addContextMenu(){
-        table.setRowFactory(new Callback<TableView<Cliente>, TableRow<Cliente>>() {
+        table.setRowFactory(new Callback<TableView<Fornecedor>, TableRow<Fornecedor>>() {
             @Override
-            public TableRow<Cliente> call(TableView<Cliente> tableView) {
-                TableRow<Cliente> tableRow = new TableRow<>();
+            public TableRow<Fornecedor> call(TableView<Fornecedor> tableView) {
+                TableRow<Fornecedor> tableRow = new TableRow<>();
 
                 ContextMenu contextMenu = new ContextMenu();
 
@@ -152,7 +154,7 @@ public class ClientesController implements Initializable {
                 removerItem.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        ClienteDAO.delete(tableRow.getItem().getId(), tableRow.getItem().getEndereco().getId());
+                        FornecedorDAO.delete(tableRow.getItem().getId(), tableRow.getItem().getEndereco().getId());
                         table.setPlaceholder(new Label("Tabela vazia"));
                         refreshTable();
                     }
