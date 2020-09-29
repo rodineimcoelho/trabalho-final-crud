@@ -1,4 +1,4 @@
-package control.fornecedores;
+package control.funcionarios;
 
 import dao.FornecedorDAO;
 import dao.FuncionarioDAO;
@@ -21,29 +21,30 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import model.Fornecedor;
+import model.Funcionario;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class FornecedoresController implements Initializable {
+public class FuncionariosController implements Initializable {
 
     @FXML
     private TextField search_field;
 
     @FXML
-    private TableView<Fornecedor> table;
+    private TableView<Funcionario> table;
 
     @FXML
     private Button add_button;
 
-    private ObservableList<Fornecedor> fornecedores;
+    private ObservableList<Funcionario> funcionarios;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         createColumns();
 
-        add_button.setText("Adicionar Fornecedor");
+        add_button.setText("Adicionar Funcionário");
         table.setPlaceholder(new Label("Tabela vazia"));
 
         addContextMenu();
@@ -52,40 +53,40 @@ public class FornecedoresController implements Initializable {
     }
 
     private void createColumns(){
-        TableColumn columnId = new TableColumn<Fornecedor, Integer>("ID");
-        TableColumn columnNome = new TableColumn<Fornecedor, String>("Nome");
-        TableColumn columnEndereco = new TableColumn<Fornecedor, String>("Endereço");
-        TableColumn columnCNPJ = new TableColumn<Fornecedor, String>("CNPJ");
+        TableColumn columnId = new TableColumn<Funcionario, Integer>("ID");
+        TableColumn columnNome = new TableColumn<Funcionario, String>("Nome");
+        TableColumn columnEndereco = new TableColumn<Funcionario, String>("Endereço");
+        TableColumn columnCargo = new TableColumn<Funcionario, String>("CNPJ");
 
         columnId.setEditable(false);
         columnNome.setEditable(false);
         columnEndereco.setEditable(false);
-        columnCNPJ.setEditable(false);
+        columnCargo.setEditable(false);
 
         columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        columnEndereco.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Fornecedor, String>, ObservableValue<String>>() {
+        columnEndereco.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Funcionario, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue call(TableColumn.CellDataFeatures<Fornecedor, String> cellDataFeatures) {
+            public ObservableValue call(TableColumn.CellDataFeatures<Funcionario, String> cellDataFeatures) {
                 return new SimpleStringProperty(cellDataFeatures.getValue().getEndereco().toString());
             }
         });
-        columnCNPJ.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Fornecedor, String>, ObservableValue<String>>() {
+        columnCargo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Funcionario, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue call(TableColumn.CellDataFeatures<Fornecedor, String> cellDataFeatures) {
-                return new SimpleStringProperty(cellDataFeatures.getValue().getFormattedCnpj());
+            public ObservableValue call(TableColumn.CellDataFeatures<Funcionario, String> cellDataFeatures) {
+                return new SimpleStringProperty(cellDataFeatures.getValue().getCargo());
             }
         });
 
-        table.getColumns().addAll(columnId, columnNome, columnEndereco, columnCNPJ);
+        table.getColumns().addAll(columnId, columnNome, columnEndereco, columnCargo);
     }
 
     @FXML
     void add(ActionEvent event) {
         Stage stage = new Stage();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/adicionar_fornecedor.fxml"));
-            loader.setController(new AdicionarFornecedoresController(table));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/adicionar_funcionario.fxml"));
+            loader.setController(new AdicionarFuncionariosController(table));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -100,11 +101,11 @@ public class FornecedoresController implements Initializable {
 
     }
 
-    void editar(Fornecedor fornecedor){
+    void editar(Funcionario funcionario){
         Stage stage = new Stage();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/adicionar_fornecedor.fxml"));
-            loader.setController(new EditarFornecedoresController(table, fornecedor));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/adicionar_funcionario.fxml"));
+            loader.setController(new EditarFuncionariosController(table, funcionario));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -120,8 +121,8 @@ public class FornecedoresController implements Initializable {
 
     @FXML
     void search(ActionEvent event) {
-        ObservableList<Fornecedor> search = FXCollections.observableArrayList(FornecedorDAO.read(search_field.getText().trim()));
-        if(fornecedores.size() == 0){
+        ObservableList<Funcionario> search = FXCollections.observableArrayList(FuncionarioDAO.read(search_field.getText().trim()));
+        if(funcionarios.size() == 0){
             table.setPlaceholder(new Label("Tabela vazia"));
         }else if(search.size() == 0){
             table.setPlaceholder(new Label("Sem correspondências para a busca"));
@@ -130,15 +131,15 @@ public class FornecedoresController implements Initializable {
     }
 
     public void refreshTable(){
-        fornecedores = FXCollections.observableArrayList(FornecedorDAO.read());
-        table.setItems(fornecedores);
+        funcionarios = FXCollections.observableArrayList(FuncionarioDAO.read());
+        table.setItems(funcionarios);
     }
 
     void addContextMenu(){
-        table.setRowFactory(new Callback<TableView<Fornecedor>, TableRow<Fornecedor>>() {
+        table.setRowFactory(new Callback<TableView<Funcionario>, TableRow<Funcionario>>() {
             @Override
-            public TableRow<Fornecedor> call(TableView<Fornecedor> tableView) {
-                TableRow<Fornecedor> tableRow = new TableRow<>();
+            public TableRow<Funcionario> call(TableView<Funcionario> tableView) {
+                TableRow<Funcionario> tableRow = new TableRow<>();
 
                 ContextMenu contextMenu = new ContextMenu();
 
@@ -160,10 +161,11 @@ public class FornecedoresController implements Initializable {
                         alert.showAndWait();
 
                         if(alert.getResult() == ButtonType.YES){
-                            FornecedorDAO.delete(tableRow.getItem().getId(), tableRow.getItem().getEndereco().getId());
+                            FuncionarioDAO.delete(tableRow.getItem().getId(), tableRow.getItem().getEndereco().getId());
                             table.setPlaceholder(new Label("Tabela vazia"));
                             refreshTable();
                         }
+
                     }
                 });
 
@@ -185,3 +187,4 @@ public class FornecedoresController implements Initializable {
         });
     }
 }
+

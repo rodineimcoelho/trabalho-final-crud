@@ -17,7 +17,7 @@ public abstract class ConnectionHandler {
                             "    rua    VARCHAR,\n" +
                             "    uf     VARCHAR (2),\n" +
                             "    cidade VARCHAR,\n" +
-                            "    cep    INTEGER (8) \n" +
+                            "    cep    VARCHAR (8) \n" +
                             ");"
             );
             statement.execute("" +
@@ -34,7 +34,15 @@ public abstract class ConnectionHandler {
                     "    id           INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                     "    nome         VARCHAR,\n" +
                     "    id_endereco  INTEGER REFERENCES enderecos (id),\n" +
-                    "    cnpj INTEGER(14)\n" +
+                    "    cnpj VARCHAR(14)\n" +
+                    ");");
+
+            statement.execute("" +
+                    "CREATE TABLE IF NOT EXISTS funcionarios (\n" +
+                    "    id           INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    "    nome         VARCHAR,\n" +
+                    "    id_endereco  INTEGER REFERENCES enderecos (id),\n" +
+                    "    cargo VARCHAR\n" +
                     ");");
             return connection;
         } catch (SQLException throwables) {

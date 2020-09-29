@@ -1,7 +1,6 @@
 package control.clientes;
 
 import dao.ClienteDAO;
-import dao.EnderecoDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -156,8 +155,7 @@ public class EditarClientesController implements Initializable {
         String rua = txt_rua.getText().trim();
         String uf = box_uf.getSelectionModel().getSelectedItem();
         String cidade = txt_cidade.getText();
-        String cepString = txt_cep.getText().trim();
-        int cep;
+        String cep = txt_cep.getText().trim();
         String nomeUsuario = txt_nome_usuario.getText().trim();
         String senha = txt_senha.getText().trim();
 
@@ -165,15 +163,15 @@ public class EditarClientesController implements Initializable {
             if(!checkEmpty(rua, txt_rua, "Rua não pode estar vazia", label)){
                 if(!checkEmpty(uf, box_uf, "Selecione uma UF", label)){
                     if(!checkEmpty(cidade, txt_cidade, "Cidade não pode estar vazia", label)){
-                        if(!(checkEmpty(cepString, txt_cep, "CEP não pode estar vazio", label))){
-                            if(!cepString.matches("^[0-9]*$")){
+                        if(!(checkEmpty(cep, txt_cep, "CEP não pode estar vazio", label))){
+                            if(!cep.matches("^[0-9]*$")){
                                 label.setText("CEP deve conter apenas números");
                                 label.setTextFill(Paint.valueOf("red"));
                                 txt_cep.setStyle(
                                         "-fx-background-color: red, #FFFFFF ;\n" +
                                                 "    -fx-background-insets: 0, 0 0 1 0 ;\n" +
                                                 "    -fx-background-radius: 0");
-                            }else if(cepString.length() < 8 ){
+                            }else if(cep.length() < 8 ){
                                 label.setText("CEP deve conter 8 dígitos");
                                 label.setTextFill(Paint.valueOf("red"));
                                 txt_cep.setStyle(
@@ -181,7 +179,6 @@ public class EditarClientesController implements Initializable {
                                                 "    -fx-background-insets: 0, 0 0 1 0 ;\n" +
                                                 "    -fx-background-radius: 0");
                             }else {
-                                cep = Integer.parseInt(cepString);
                                 if(!checkEmpty(nomeUsuario, txt_nome_usuario, "Nome de usuário não pode estar vazio", label)){
                                     if(!checkEmpty(senha, txt_senha, "Senha não pode estar vazia", label)){
                                         Endereco endereco = new Endereco(cliente.getEndereco().getId(), rua, uf, cidade, cep);
@@ -196,13 +193,6 @@ public class EditarClientesController implements Initializable {
                                             close(new ActionEvent());
                                         }
 
-                                        txt_nome.setStyle(style);
-                                        txt_rua.setStyle(style);
-                                        box_uf.setStyle(style);
-                                        txt_cidade.setStyle(style);
-                                        txt_cep.setStyle(style);
-                                        txt_nome_usuario.setStyle(style);
-                                        txt_senha.setStyle(style);
                                     }
                                 }
                             }
@@ -257,7 +247,7 @@ public class EditarClientesController implements Initializable {
         txt_rua.setText(cliente.getEndereco().getRua());
         box_uf.getSelectionModel().select(cliente.getEndereco().getUf());
         txt_cidade.setText(cliente.getEndereco().getCidade());
-        txt_cep.setText(Integer.toString(cliente.getEndereco().getCep()));
+        txt_cep.setText(cliente.getEndereco().getCep());
         txt_nome_usuario.setText(cliente.getNomeUsuario());
         txt_senha.setText(cliente.getSenha());
     }

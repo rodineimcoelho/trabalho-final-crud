@@ -5,16 +5,16 @@ public class Endereco {
     private String rua;
     private String uf;
     private String cidade;
-    private int cep;
+    private String cep;
 
-    public Endereco(String rua, String uf, String cidade, int cep){
+    public Endereco(String rua, String uf, String cidade, String cep){
         setRua(rua);
         setUf(uf);
         setCidade(cidade);
         setCep(cep);
     }
 
-    public Endereco(int id, String rua, String uf, String cidade, int cep){
+    public Endereco(int id, String rua, String uf, String cidade, String cep){
         setId(id);
         setRua(rua);
         setUf(uf);
@@ -55,11 +55,11 @@ public class Endereco {
         this.cidade = cidade;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 
-    public void setCep(int cep) {
+    public void setCep(String cep) {
         this.cep = cep;
     }
 

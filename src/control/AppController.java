@@ -3,6 +3,7 @@ package control;
 import application.Main;
 import control.clientes.ClientesController;
 import control.fornecedores.FornecedoresController;
+import control.funcionarios.FuncionariosController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -156,7 +157,9 @@ public class AppController implements Initializable {
         Parent root = null;
 
         try {
-            root = FXMLLoader.load(getClass().getResource("../view/section.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/section.fxml"));
+            loader.setController(new FuncionariosController());
+            root = loader.load();
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.NONE, "Erro ao carregar layout.\n\nErro: " +e, ButtonType.OK);
             alert.setTitle("Erro");

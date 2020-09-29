@@ -1,6 +1,7 @@
-package control.clientes;
+package control.funcionarios;
 
-import dao.ClienteDAO;
+import dao.FornecedorDAO;
+import dao.FuncionarioDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,13 +12,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import model.Cliente;
 import model.Endereco;
+import model.Fornecedor;
+import model.Funcionario;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AdicionarClientesController implements Initializable {
+public class EditarFuncionariosController implements Initializable {
 
     @FXML
     private HBox appbar;
@@ -45,18 +47,27 @@ public class AdicionarClientesController implements Initializable {
     private TextField txt_cep;
 
     @FXML
-    private TextField txt_nome_usuario;
-
-    @FXML
-    private TextField txt_senha;
+    private TextField txt_cargo;
 
     @FXML
     private Label label;
 
-    private TableView<Cliente> tableView;
+    @FXML
+    private Button button;
 
-    public AdicionarClientesController(TableView<Cliente> tableView){
+    private TableView<Funcionario> tableView;
+
+    private Funcionario funcionario;
+
+    private int id;
+
+
+
+    public EditarFuncionariosController(TableView<Funcionario> tableView, Funcionario funcionario){
         this.tableView = tableView;
+        this.funcionario = funcionario;
+        this.id = funcionario.getId();
+
     }
 
     @Override
@@ -90,8 +101,12 @@ public class AdicionarClientesController implements Initializable {
                 "SE",
                 "TO");
 
+        button.setText("Editar");
+
         makeStageDraggable();
         addTextLimiter(txt_cep, 8);
+
+        loadTexts();
     }
 
     private void makeStageDraggable() {
@@ -142,14 +157,13 @@ public class AdicionarClientesController implements Initializable {
         String uf = box_uf.getSelectionModel().getSelectedItem();
         String cidade = txt_cidade.getText();
         String cep = txt_cep.getText().trim();
-        String nomeUsuario = txt_nome_usuario.getText().trim();
-        String senha = txt_senha.getText().trim();
+        String cargo = txt_cargo.getText().trim();
 
         if(!checkEmpty(nome, txt_nome, "Nome não pode estar vazio", label)){
             if(!checkEmpty(rua, txt_rua, "Rua não pode estar vazia", label)){
                 if(!checkEmpty(uf, box_uf, "Selecione uma UF", label)){
                     if(!checkEmpty(cidade, txt_cidade, "Cidade não pode estar vazia", label)){
-                        if(!(checkEmpty(cep, txt_cep, "CEP não pode estar vazio", label))){
+                        if(!checkEmpty(cep, txt_cep, "CEP não pode estar vazio", label)){
                             if(!cep.matches("^[0-9]*$")){
                                 label.setText("CEP deve conter apenas números");
                                 label.setTextFill(Paint.valueOf("red"));
@@ -164,24 +178,17 @@ public class AdicionarClientesController implements Initializable {
                                         "-fx-background-color: red, #FFFFFF ;\n" +
                                                 "    -fx-background-insets: 0, 0 0 1 0 ;\n" +
                                                 "    -fx-background-radius: 0");
-                            }else {
-                                if(!checkEmpty(nomeUsuario, txt_nome_usuario, "Nome de usuário não pode estar vazio", label)){
-                                    if(!checkEmpty(senha, txt_senha, "Senha não pode estar vazia", label)){
-                                        Endereco endereco = new Endereco(rua, uf, cidade, cep);
-                                        ClienteDAO.create(new Cliente(nome, endereco, nomeUsuario, senha));
-                                        label.setText("Cliente adicionado com sucesso");
-                                        label.setTextFill(Paint.valueOf("green"));
+                            }else if (!checkEmpty(cargo, txt_cargo, "Cargo não pode estar vazio", label)){
+                                Endereco endereco = new Endereco(funcionario.getEndereco().getId(), rua, uf, cidade, cep);
 
-                                        tableView.setItems(FXCollections.observableArrayList(ClienteDAO.read()));
+                                Alert alert = new Alert(Alert.AlertType.NONE, "Tem certeza?", ButtonType.NO, ButtonType.YES);
+                                alert.setTitle("Confirmação");
+                                alert.showAndWait();
 
-                                        txt_nome.setStyle(style);
-                                        txt_rua.setStyle(style);
-                                        box_uf.setStyle(style);
-                                        txt_cidade.setStyle(style);
-                                        txt_cep.setStyle(style);
-                                        txt_nome_usuario.setStyle(style);
-                                        txt_senha.setStyle(style);
-                                    }
+                                if(alert.getResult() == ButtonType.YES){
+                                    FuncionarioDAO.update(new Funcionario(id, nome, endereco, cargo));
+                                    tableView.setItems(FXCollections.observableArrayList(FuncionarioDAO.read()));
+                                    close(new ActionEvent());
                                 }
                             }
                         }
@@ -228,5 +235,14 @@ public class AdicionarClientesController implements Initializable {
                 }
             }
         });
+    }
+
+    private void loadTexts(){
+        txt_nome.setText(funcionario.getNome());
+        txt_rua.setText(funcionario.getEndereco().getRua());
+        box_uf.getSelectionModel().select(funcionario.getEndereco().getUf());
+        txt_cidade.setText(funcionario.getEndereco().getCidade());
+        txt_cep.setText(funcionario.getEndereco().getCep());
+        txt_cargo.setText(funcionario.getCargo());
     }
 }

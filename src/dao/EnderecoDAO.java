@@ -21,7 +21,7 @@ public abstract class EnderecoDAO {
             statement.setString(1, endereco.getRua());
             statement.setString(2, endereco.getUf());
             statement.setString(3, endereco.getCidade());
-            statement.setInt(4, endereco.getCep());
+            statement.setString(4, endereco.getCep());
 
             statement.executeUpdate();
 
@@ -57,7 +57,7 @@ public abstract class EnderecoDAO {
                     resultSet.getString("rua"),
                     resultSet.getString("uf"),
                     resultSet.getString("cidade"),
-                    resultSet.getInt("cep")
+                    resultSet.getString("cep")
             );
         } catch (SQLException throwables) {
             Alert alert = new Alert(Alert.AlertType.NONE, "Erro ao consultar o banco de dados.\n\nErro: " +throwables, ButtonType.OK);
@@ -79,7 +79,7 @@ public abstract class EnderecoDAO {
             statement.setString(1, endereco.getRua());
             statement.setString(2, endereco.getUf());
             statement.setString(3, endereco.getCidade());
-            statement.setInt(4, endereco.getCep());
+            statement.setString(4, endereco.getCep());
             statement.setInt(5, endereco.getId());
 
             statement.executeUpdate();

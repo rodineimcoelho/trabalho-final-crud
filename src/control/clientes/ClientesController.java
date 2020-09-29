@@ -1,6 +1,7 @@
 package control.clientes;
 
 import dao.ClienteDAO;
+import dao.FornecedorDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -152,9 +153,15 @@ public class ClientesController implements Initializable {
                 removerItem.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        ClienteDAO.delete(tableRow.getItem().getId(), tableRow.getItem().getEndereco().getId());
-                        table.setPlaceholder(new Label("Tabela vazia"));
-                        refreshTable();
+                        Alert alert = new Alert(Alert.AlertType.NONE, "Tem certeza?", ButtonType.NO, ButtonType.YES);
+                        alert.setTitle("Confirmação");
+                        alert.showAndWait();
+
+                        if(alert.getResult() == ButtonType.YES){
+                            ClienteDAO.delete(tableRow.getItem().getId(), tableRow.getItem().getEndereco().getId());
+                            table.setPlaceholder(new Label("Tabela vazia"));
+                            refreshTable();
+                        }
                     }
                 });
 

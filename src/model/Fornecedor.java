@@ -1,34 +1,32 @@
 package model;
 
-import java.math.BigInteger;
-
 public class Fornecedor extends Pessoa{
-    private long cnpj;
+    private String cnpj;
 
 
-    public Fornecedor(String nome, Endereco endereco, long cnpj){
+    public Fornecedor(String nome, Endereco endereco, String cnpj){
         setNome(nome);
         setEndereco(endereco);
         setCnpj(cnpj);
     }
 
-    public Fornecedor(int id, String nome, Endereco endereco, long cnpj){
+    public Fornecedor(int id, String nome, Endereco endereco, String cnpj){
         setId(id);
         setNome(nome);
         setEndereco(endereco);
         setCnpj(cnpj);
     }
 
-    public long getCnpj() {
+    public String getCnpj() {
         return cnpj;
     }
 
-    public void setCnpj(long cnpj) {
+    public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
     public String getFormattedCnpj() {
-        String cnpj = Long.toString(getCnpj());
+        String cnpj = getCnpj();
 
         return cnpj.substring(0, 2) +
                 ". " + cnpj.substring(2, 5) +

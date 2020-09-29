@@ -1,6 +1,5 @@
 package control.fornecedores;
 
-import dao.ClienteDAO;
 import dao.FornecedorDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import model.Cliente;
 import model.Endereco;
 import model.Fornecedor;
 
@@ -156,24 +154,22 @@ public class EditarFornecedoresController implements Initializable {
         String rua = txt_rua.getText().trim();
         String uf = box_uf.getSelectionModel().getSelectedItem();
         String cidade = txt_cidade.getText();
-        String cepString = txt_cep.getText().trim();
-        String cnpjString = txt_cnpj.getText().trim();
-        int cep;
-        long cnpj;
+        String cep = txt_cep.getText().trim();
+        String cnpj = txt_cnpj.getText().trim();
 
         if(!checkEmpty(nome, txt_nome, "Nome não pode estar vazio", label)){
             if(!checkEmpty(rua, txt_rua, "Rua não pode estar vazia", label)){
                 if(!checkEmpty(uf, box_uf, "Selecione uma UF", label)){
                     if(!checkEmpty(cidade, txt_cidade, "Cidade não pode estar vazia", label)){
-                        if(!(checkEmpty(cepString, txt_cep, "CEP não pode estar vazio", label))){
-                            if(!cepString.matches("^[0-9]*$")){
+                        if(!(checkEmpty(cep, txt_cep, "CEP não pode estar vazio", label))){
+                            if(!cep.matches("^[0-9]*$")){
                                 label.setText("CEP deve conter apenas números");
                                 label.setTextFill(Paint.valueOf("red"));
                                 txt_cep.setStyle(
                                         "-fx-background-color: red, #FFFFFF ;\n" +
                                                 "    -fx-background-insets: 0, 0 0 1 0 ;\n" +
                                                 "    -fx-background-radius: 0");
-                            }else if(cepString.length() < 8 ){
+                            }else if(cep.length() < 8 ){
                                 label.setText("CEP deve conter 8 dígitos");
                                 label.setTextFill(Paint.valueOf("red"));
                                 txt_cep.setStyle(
@@ -181,16 +177,15 @@ public class EditarFornecedoresController implements Initializable {
                                                 "    -fx-background-insets: 0, 0 0 1 0 ;\n" +
                                                 "    -fx-background-radius: 0");
                             }else {
-                                cep = Integer.parseInt(cepString);
-                                if(!checkEmpty(cnpjString, txt_cnpj, "CNPJ não pode estar vazio", label)){
-                                    if(!cnpjString.matches("^[0-9]*$")){
+                                if(!checkEmpty(cnpj, txt_cnpj, "CNPJ não pode estar vazio", label)){
+                                    if(!cnpj.matches("^[0-9]*$")){
                                         label.setText("CENPJ deve conter apenas números");
                                         label.setTextFill(Paint.valueOf("red"));
                                         txt_cnpj.setStyle(
                                                 "-fx-background-color: red, #FFFFFF ;\n" +
                                                         "    -fx-background-insets: 0, 0 0 1 0 ;\n" +
                                                         "    -fx-background-radius: 0");
-                                    }else if(cnpjString.length() < 14 ) {
+                                    }else if(cnpj.length() < 14 ) {
                                         label.setText("CNPJ deve conter 14 dígitos");
                                         label.setTextFill(Paint.valueOf("red"));
                                         txt_cnpj.setStyle(
@@ -198,7 +193,6 @@ public class EditarFornecedoresController implements Initializable {
                                                         "    -fx-background-insets: 0, 0 0 1 0 ;\n" +
                                                         "    -fx-background-radius: 0");
                                     }else {
-                                        cnpj = Long.parseLong(cnpjString);
                                         Endereco endereco = new Endereco(fornecedor.getEndereco().getId(), rua, uf, cidade, cep);
 
                                         Alert alert = new Alert(Alert.AlertType.NONE, "Tem certeza?", ButtonType.NO, ButtonType.YES);
@@ -211,12 +205,6 @@ public class EditarFornecedoresController implements Initializable {
                                             close(new ActionEvent());
                                         }
 
-                                        txt_nome.setStyle(style);
-                                        txt_rua.setStyle(style);
-                                        box_uf.setStyle(style);
-                                        txt_cidade.setStyle(style);
-                                        txt_cep.setStyle(style);
-                                        txt_cnpj.setStyle(style);
                                     }
                                 }
                             }
@@ -271,7 +259,7 @@ public class EditarFornecedoresController implements Initializable {
         txt_rua.setText(fornecedor.getEndereco().getRua());
         box_uf.getSelectionModel().select(fornecedor.getEndereco().getUf());
         txt_cidade.setText(fornecedor.getEndereco().getCidade());
-        txt_cep.setText(Integer.toString(fornecedor.getEndereco().getCep()));
-        txt_cnpj.setText(Long.toString(fornecedor.getCnpj()));
+        txt_cep.setText(fornecedor.getEndereco().getCep());
+        txt_cnpj.setText(fornecedor.getCnpj());
     }
 }
